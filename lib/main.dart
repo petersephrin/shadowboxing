@@ -5,37 +5,97 @@ import 'package:flame/effects.dart';
 import 'package:flame/particles.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'dart:math' as math;
+import 'screens/realistic_game_screen.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Shadow Boxing',
-      home: GameWrapper(),
       debugShowCheckedModeBanner: false,
+      home: MainMenu(),
     ),
   );
 }
 
-class GameWrapper extends StatelessWidget {
-  const GameWrapper({Key? key}) : super(key: key);
-
+class MainMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GameWidget(
-        game: ShadowBoxingGame(),
-        overlayBuilderMap: {
-          'main_menu': (context, game) =>
-              MainMenuOverlay(game as ShadowBoxingGame),
-          'head_mover': (context, game) =>
-              HeadMoverOverlay(game as ShadowBoxingGame),
-          'guesser': (context, game) =>
-              GuesserOverlay(game as ShadowBoxingGame),
-          'result': (context, game) => ResultOverlay(game as ShadowBoxingGame),
-          'game_over': (context, game) =>
-              GameOverOverlay(game as ShadowBoxingGame),
-        },
-        initialActiveOverlays: const ['main_menu'],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.grey.shade800, Colors.grey.shade900],
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'SHADOW BOXING',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                letterSpacing: 2,
+              ),
+            ),
+            SizedBox(height: 50),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade700,
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                      body: GameWidget(
+                        game: ShadowBoxingGame(),
+                        overlayBuilderMap: {
+                          'main_menu': (context, game) =>
+                              MainMenuOverlay(game as ShadowBoxingGame),
+                          'head_mover': (context, game) =>
+                              HeadMoverOverlay(game as ShadowBoxingGame),
+                          'guesser': (context, game) =>
+                              GuesserOverlay(game as ShadowBoxingGame),
+                          'result': (context, game) =>
+                              ResultOverlay(game as ShadowBoxingGame),
+                          'game_over': (context, game) =>
+                              GameOverOverlay(game as ShadowBoxingGame),
+                        },
+                        initialActiveOverlays: const ['main_menu'],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                'Classic Mode',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade700,
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => RealisticGameScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                'Realistic Mode',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -988,87 +1048,39 @@ class GameOverOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: const EdgeInsets.all(30),
-        margin: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-          color: Colors.amber.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          color: Colors.black87,
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'GAME OVER',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
             Text(
-              '${game.winner} WINS!',
-              style: const TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              '3 Correct Guesses In A Row!',
+              'Game Over!',
               style: TextStyle(
-                fontSize: 22,
-                fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: Colors.white,
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    game.resetGame();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 16,
-                    ),
-                  ),
-                  child: const Text(
-                    'Play Again',
-                    style: TextStyle(fontSize: 22),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    game.overlays.remove('game_over');
-                    game.overlays.add('main_menu');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 16,
-                    ),
-                  ),
-                  child: const Text(
-                    'Main Menu',
-                    style: TextStyle(fontSize: 22),
-                  ),
-                ),
-              ],
+            SizedBox(height: 20.0),
+            Text(
+              '${game.winner} Wins!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24.0,
+              ),
+            ),
+            SizedBox(height: 30.0),
+            ElevatedButton(
+              onPressed: () {
+                game.resetGame();
+              },
+              child: Text(
+                'Play Again',
+                style: TextStyle(fontSize: 20.0),
+              ),
             ),
           ],
         ),

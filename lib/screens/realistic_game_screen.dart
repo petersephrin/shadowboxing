@@ -231,7 +231,7 @@ class _RealisticGameScreenState extends State<RealisticGameScreen>
                     // Background boxing ring
                     Positioned.fill(
                       child: Image.asset(
-                        'assets/boxing_ring.png', // You'll need to add this image
+                        'assets/images/boxing_ring.webp', // You'll need to add this image
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -246,7 +246,7 @@ class _RealisticGameScreenState extends State<RealisticGameScreen>
                           moveDirection: player1MoveDirection,
                           isMoving: isAnimating && isPlayer1Turn,
                           characterAsset:
-                              'assets/player1.png', // You'll need to add this image
+                              'assets/images/player1.png', // You'll need to add this image
                         ),
 
                         // VS indicator
